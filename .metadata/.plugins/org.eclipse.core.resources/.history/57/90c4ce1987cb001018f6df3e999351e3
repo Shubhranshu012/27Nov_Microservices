@@ -1,0 +1,5 @@
+package com.question_service.repository;
+
+public class QuestionDao {
+
+}
