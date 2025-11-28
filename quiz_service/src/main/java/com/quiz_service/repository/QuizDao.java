@@ -1,0 +1,10 @@
+package com.quiz_service.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.quiz_service.model.Quiz;
+
+@Repository
+public interface QuizDao extends JpaRepository<Quiz,Integer> {
+}
