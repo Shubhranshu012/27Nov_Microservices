@@ -1,4 +1,5 @@
 package com.quiz_service.feign;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +12,16 @@ import com.quiz_service.model.Response;
 
 import java.util.List;
 
-@FeignClient("QUESTION-SERVICE")
+@FeignClient("question-service") 
 public interface QuizInterface {
-    @GetMapping("question/generate")
-    public ResponseEntity<List<Integer>> getQuestionsForQuiz
-            (@RequestParam String categoryName, @RequestParam Integer numQuestions );
 
-    @PostMapping("question/getQuestions")
-    public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionIds);
+    @GetMapping("/question/generate")
+    ResponseEntity<List<Integer>> getQuestionsForQuiz(@RequestParam("categoryName") String categoryName,@RequestParam("numQuestions") Integer numQuestions);
 
-    @PostMapping("question/getScore")
-    public ResponseEntity<Integer> getScore(@RequestBody List<Response> responses);
+    @PostMapping("/question/getQuestions")
+    ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionIds);
+
+    @PostMapping("/question/getScore")
+    ResponseEntity<Integer> getScore(@RequestBody List<Response> responses);
 
 }
