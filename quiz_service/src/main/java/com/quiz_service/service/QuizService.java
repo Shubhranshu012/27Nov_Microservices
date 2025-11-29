@@ -11,6 +11,8 @@ import com.quiz_service.model.Quiz;
 import com.quiz_service.model.Response;
 import com.quiz_service.repository.QuizDao;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 import java.util.List;
 
 @Service
@@ -22,7 +24,7 @@ public class QuizService {
     @Autowired
     QuizInterface quizInterface;
 
-
+    @CircuitBreaker(name = "questionService", fallbackMethod = "fallback")
     public ResponseEntity<String> createQuiz(String category, int numQ, String title) {
 
         List<Integer> questions = quizInterface.getQuestionsForQuiz(category, numQ).getBody();
@@ -34,7 +36,9 @@ public class QuizService {
         return new ResponseEntity<>("Success", HttpStatus.CREATED);
 
     }
-
+    public ResponseEntity<String> fallback(String category, int numQ, String title, Throwable t) {
+        return new ResponseEntity<>("Question Service unavailable. Cannot create quiz.", HttpStatus.SERVICE_UNAVAILABLE);
+    }
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer id) {
           Quiz quiz = quizDao.findById(id).get();
           List<Integer> questionIds = quiz.getQuestionIds();
